@@ -63,3 +63,29 @@ function addMessageToDom(message) {
   const messageContainer = document.getElementById('message-container');
   messageContainer.innerText = message;
 }
+
+/**
+ * Fetches stats from the servers and adds them to the DOM.
+ */
+function getMessages() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+    // stats is an object, not a string, so we have to
+    // reference its fields to create HTML content
+
+    const statsListElement = document.getElementById('message-container');
+    statsListElement.innerHTML = '';
+    statsListElement.appendChild(
+        createListElement('Message 1: ' + messages.get(0)));
+    statsListElement.appendChild(
+        createListElement('Message 2: ' + messages.get(1)));
+    statsListElement.appendChild(
+        createListElement('Message 3: ' + messages.get(2)));
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
