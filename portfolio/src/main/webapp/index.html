@@ -8,13 +8,21 @@
   </head>
   <body onload="getWelcomeMessage()">
     <div id="content">
-      <div id="message-container"></div>
       <h1>Hi, I'm Michael.</h1>
       <img src="/images/Gutierrez_Michael_Picture_Small.jpg"/></img>
       <p>I am a sophomore at Columbia University studying computer science and applied mathematics.</p>
       <p>I was born and raised in Albuquerque, New Mexico and spent my entire life there before transferring to Columbia after my freshman year of college.</p>
       <p>When I'm not doing school work, I enjoy listening to music, going to concerts, and going to car shows.</p>
       
+      <form action="/data" method="POST">
+        <h2>Write a comment!</h2>
+        <textarea name="text-input"></textarea>
+        <br/><br/>
+        <input type="submit" />
+      </form>
+      <p></p>
+      <div id="message-container"></div>
+
       <h2>These are a few projects I have worked on</h2>
       <ul>
           <li>Webapp to locate quiet study spots on campus</li>

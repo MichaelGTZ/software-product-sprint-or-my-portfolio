@@ -26,31 +26,52 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+    List<String> messages = new ArrayList<>();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html;");
-    response.getWriter().println("Welcome to my portfolio!");
+    response.getWriter().println("Comments: ");
 
-    List<String> messages = new ArrayList<>();
-    messages.add("Hello!");
-    messages.add("The weather is cold today.");
-    messages.add("Tomorrow is supposed to be much warmer.");
     String jsonMessages = convertToJson(messages);
     response.setContentType("application/json;");
-    response.getWriter().println(jsonMessages);
+    for (int i = 0; i < messages.size(); i++) {
+        response.getWriter().println(messages.get(i));
+    }
   }
 
   private String convertToJson(List<String> inputMessages) {
     String json = "{";
-    json += "\"Message1\": ";
-    json += "\"" + inputMessages.get(0) + "\"";
-    json += ", ";
-    json += "\"Message2\": ";
-    json += "\"" + inputMessages.get(1) + "\"";
-    json += ", ";
-    json += "\"Message3\": ";
-    json += "\"" + inputMessages.get(2) + "\"";
+    for (int i = 0; i < inputMessages.size(); i++) {
+        json += "\"" + inputMessages.get(i) + "\"";
+        json += ", ";    
+    }
     json += "}";
     return json;
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    String text = getParameter(request, "text-input", "");
+    
+    messages.add(text);
+
+    // Respond with the result.
+    response.sendRedirect("/index.html");
+    response.setContentType("text/html;");
+    response.getWriter().println(messages);
+  }
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 }
