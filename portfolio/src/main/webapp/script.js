@@ -17,7 +17,7 @@
  */
 function addRandomGreeting() {
   const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+      ['I have a twin brother.', 'I was born in Albuquerque, New Mexico', 'I was a gymnast.', 'I have never travelled out side of the country.'];
 
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -25,4 +25,67 @@ function addRandomGreeting() {
   // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
+}
+
+/**
+ * Fetches a welcome message from the server and adds it to the DOM.
+ */
+function getWelcomeMessage() {
+  console.log('Fetching welcome message.');
+
+  // The fetch() function returns a Promise because the request is asynchronous.
+  const responsePromise = fetch('/data');
+
+  // When the request is complete, pass the response into handleResponse().
+  responsePromise.then(handleResponse);
+}
+
+/**
+ * Handles response by converting it to text and passing the result to
+ * addQuoteToDom().
+ */
+function handleResponse(response) {
+  console.log('Handling the response.');
+
+  // response.text() returns a Promise, because the response is a stream of
+  // content and not a simple variable.
+  const textPromise = response.text();
+
+  // When the response is converted to text, pass the result into the
+  // addMessageToDom() function.
+  textPromise.then(addMessageToDom);
+}
+
+/** Adds message to the DOM. */
+function addMessageToDom(message) {
+  console.log('Adding message to dom: ' + message);
+
+  const messageContainer = document.getElementById('message-container');
+  messageContainer.innerText = message;
+}
+
+/**
+ * Fetches stats from the servers and adds them to the DOM.
+ */
+function getMessages() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+    // stats is an object, not a string, so we have to
+    // reference its fields to create HTML content
+
+    const statsListElement = document.getElementById('message-container');
+    statsListElement.innerHTML = '';
+    statsListElement.appendChild(
+        createListElement('Message 1: ' + messages.get(0)));
+    statsListElement.appendChild(
+        createListElement('Message 2: ' + messages.get(1)));
+    statsListElement.appendChild(
+        createListElement('Message 3: ' + messages.get(2)));
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
